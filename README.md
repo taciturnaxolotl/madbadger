@@ -10,9 +10,8 @@
 <p align="center">
   <img width="460" height="460" src="https://raw.githubusercontent.com/kcoderhtml/madbadger/refs/heads/master/.github/images/logo.png">
 </p>
-
 <p align="center">
-  <i>My version (WIP with more features soon) of the 2024 github universe [badge++](https://github.com/kcoderhtml/badger-2024/tree/main/examples/badge%2B%2B) code</i>
+  <i>My version (WIP with more features soon) of the 2024 github universe <a href="https://github.com/kcoderhtml/badger-2024/tree/main/examples/badge%2B%2B">badge++</a> code</i>
 </p>
 
 ---
