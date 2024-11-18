@@ -8,7 +8,7 @@
 #
 
 <p align="center">
-  <img width="460" height="460" src="https://raw.githubusercontent.com/kcoderhtml/pip/refs/heads/master/.github/images/logo.png">
+  <img width="460" height="460" src="https://raw.githubusercontent.com/kcoderhtml/madbadger/refs/heads/master/.github/images/logo.png">
 </p>
 
 <p align="center">
