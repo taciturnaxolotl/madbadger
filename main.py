@@ -1,6 +1,7 @@
 import badger2040
 import badger_os
 import jpegdec
+import pngdec
 import os
 import re
 
@@ -71,6 +72,9 @@ def draw_badge():
     display.set_pen(15)
     display.clear()
 
+    # Initialize TEXT_WIDTH with default value
+    TEXT_WIDTH = WIDTH - LEFT_PADDING
+
     # Draw the background
     try:
         target_image = BADGE_IMAGES[state["picture_idx"]]
@@ -91,6 +95,8 @@ def draw_badge():
             jpeg.decode(WIDTH - image_size, 0)
     except OSError:
         print("Badge background error")
+        # Ensure TEXT_WIDTH is set even if there's an error
+        TEXT_WIDTH = WIDTH - LEFT_PADDING
 
     # Draw the firstname.
     display.set_pen(0)
@@ -156,13 +162,7 @@ display.led(128)
 display.set_update_speed(badger2040.UPDATE_NORMAL)
 
 jpeg = jpegdec.JPEG(display.display)
-
-# Only load the PNG library if we're not in compatibility mode.
-if(not(BACK_COMPAT_MODE)):
-    import pngdec
-    png = pngdec.PNG(display.display)
-else:
-    print("PNG library is not available on the Universe 2023 badge.")
+png = pngdec.PNG(display.display)
 
 # Open the badge file
 try:
@@ -207,6 +207,17 @@ except OSError:
     pass
 
 # Avoid trying to be an invalid state if images are removed.
+# Ensure TOTAL_IMAGES is defined even if the try block fails
+try:
+    BADGE_IMAGES = [
+        f for f in os.listdir("/badges")
+        if f.endswith(".jpg") or (not(BACK_COMPAT_MODE) and f.endswith(".png"))
+    ]
+    TOTAL_IMAGES = len(BADGE_IMAGES)
+except OSError:
+    BADGE_IMAGES = []
+    TOTAL_IMAGES = 0
+
 if TOTAL_IMAGES > 0:
     state["picture_idx"] = max(min(state["picture_idx"], TOTAL_IMAGES - 1), 0)
 else:
