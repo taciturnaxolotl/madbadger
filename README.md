@@ -10,14 +10,14 @@
 
 Customization can be done in `badges/badge.txt`
 
-```
-Counterspell
-Kieran Klukas
-@kcoderhtml
-Hackclub
-Organizer
-he/him
-@kcoderhtml
+```bash
+Counterspell # event name
+Kieran Klukas # name
+@taciturnaxolotl # handle
+Hackclub # organization
+Organizer # role
+he/him # pronouns
+@taciturnaxolotl # handle
 ```
 
 Feel free to add your github profile picture as an option too by running `profile-pic-downloader.py` and replacing my username with your username. 

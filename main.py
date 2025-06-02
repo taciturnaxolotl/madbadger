@@ -70,7 +70,7 @@ def extract_image_width_from_filename(filename):
 def draw_badge():
     display.set_pen(15)
     display.clear()
-    
+
     # Draw the background
     try:
         target_image = BADGE_IMAGES[state["picture_idx"]]
@@ -80,7 +80,7 @@ def draw_badge():
         # If no image was pulled from the name, it must be the background.
         if(image_size == 0):
             image_size = WIDTH
-        
+
         image_path = f"/badges/{target_image}"
         print(image_path)
         if image_path.endswith(".png"):
@@ -96,7 +96,7 @@ def draw_badge():
     display.set_pen(0)
     display.set_font(FONTS[state["font_idx"]])
     display.set_thickness(THICKNESSES[state["font_idx"]])
-    
+
     size_adjustment = SIZE_ADJ[state["font_idx"]]
     vertical_adjustment = (int(1 / size_adjustment) - 1) * 5
 
@@ -125,7 +125,7 @@ def draw_badge():
     # Draw the title and pronouns, aligned to the bottom & truncated to fit on one line
     display.set_pen(0)
     display.set_thickness(int(THICKNESSES[state["font_idx"]] / 2))
-    
+
     # Title
     display.text(title, LEFT_PADDING, HEIGHT - (DETAILS_HEIGHT * 2) - LINE_SPACING - 2, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
 
@@ -135,7 +135,7 @@ def draw_badge():
         display.text(pronouns, LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
     else:
         display.text(handle, LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
-    
+
     display.update()
 
 
@@ -175,27 +175,27 @@ except OSError:
 
 # Read in the next 6 lines           # Default values
 try:
-    event = badge.readline()         # "Universe 2024"
-    first_name = badge.readline()    # "Mona Lisa"
-    last_name = badge.readline()     # "Octocat"
-    company = badge.readline()       # "GitHub"
-    title = badge.readline()         # "Company Mascot"
-    pronouns = badge.readline()      # "she/her"
-    handle = badge.readline()        # "@mona"
-    
+    event = badge.readline().strip()         # "Universe 2024"
+    first_name = badge.readline().strip()    # "Mona Lisa"
+    last_name = badge.readline().strip()     # "Octocat"
+    company = badge.readline().strip()       # "GitHub"
+    title = badge.readline().strip()         # "Company Mascot"
+    pronouns = badge.readline().strip()      # "she/her"
+    handle = badge.readline().strip()        # "@mona"
+
     # If the first name is empty, use the last name as the first name
     if first_name.strip() == "":
         first_name = last_name
         last_name = ""
-    
+
     # Truncate Title and pronouns to fit
     title = truncate_string(title, DETAILS_TEXT_SIZE, 310)
-    pronouns = truncate_string(pronouns, DETAILS_TEXT_SIZE, 110)
+    pronouns = truncate_string(pronouns, DETAILS_TEXT_SIZE, 220)
     handle = truncate_string(handle, DETAILS_TEXT_SIZE, 220)
-    
+
 finally:
     badge.close()
-    
+
 # Inventory profile images. Ignore PNGs if compatibility mode is enabled.
 try:
     BADGE_IMAGES = [
@@ -207,7 +207,10 @@ except OSError:
     pass
 
 # Avoid trying to be an invalid state if images are removed.
-state["picture_idx"] = max(state["picture_idx"], TOTAL_IMAGES - 1)
+if TOTAL_IMAGES > 0:
+    state["picture_idx"] = max(min(state["picture_idx"], TOTAL_IMAGES - 1), 0)
+else:
+    state["picture_idx"] = 0
 
 # ------------------------------
 #       Main program loop
@@ -226,7 +229,7 @@ while True:
         state["picture_idx"] -= 1
         if (state["picture_idx"] < 0):
             state["picture_idx"] = TOTAL_IMAGES - 1
-    
+
         changed = True
 
     # Was the image requested to be changed?
@@ -234,7 +237,7 @@ while True:
         state["picture_idx"] += 1
         if (state["picture_idx"] >= TOTAL_IMAGES):
             state["picture_idx"] = 0
-    
+
         changed = True
 
     # Was the font requested to be changed?
@@ -242,7 +245,7 @@ while True:
         state["font_idx"] += 1
         if (state["font_idx"] >= len(FONTS)):
             state["font_idx"] = 0
-            
+
         changed = True
 
     # Was the font requested to be changed?
