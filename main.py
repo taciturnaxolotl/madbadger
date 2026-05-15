@@ -132,15 +132,15 @@ def draw_badge():
     display.set_pen(0)
     display.set_thickness(int(THICKNESSES[state["font_idx"]] / 2))
 
-    # Title
-    display.text(title, LEFT_PADDING, HEIGHT - (DETAILS_HEIGHT * 2) - LINE_SPACING - 2, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
+    # Title, truncated to fit available width
+    display.text(truncate_string(title, DETAILS_TEXT_SIZE * size_adjustment, TEXT_WIDTH), LEFT_PADDING, HEIGHT - (DETAILS_HEIGHT * 2) - LINE_SPACING - 2, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
 
     # Show pronouns if given, otherwise show any handle or blank if neither
     # if pronouns exists and is not empty, show it
     if pronouns and pronouns.strip() != "":
-        display.text(pronouns, LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
+        display.text(truncate_string(pronouns, DETAILS_TEXT_SIZE * size_adjustment, TEXT_WIDTH), LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
     else:
-        display.text(handle, LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
+        display.text(truncate_string(handle, DETAILS_TEXT_SIZE * size_adjustment, TEXT_WIDTH), LEFT_PADDING, HEIGHT - DETAILS_HEIGHT, TEXT_WIDTH, DETAILS_TEXT_SIZE * size_adjustment)
 
     display.update()
 
@@ -188,10 +188,7 @@ try:
         first_name = last_name
         last_name = ""
 
-    # Truncate Title and pronouns to fit
-    title = truncate_string(title, DETAILS_TEXT_SIZE, 310)
-    pronouns = truncate_string(pronouns, DETAILS_TEXT_SIZE, 220)
-    handle = truncate_string(handle, DETAILS_TEXT_SIZE, 220)
+    # Title and pronouns will be truncated in draw_badge using actual TEXT_WIDTH
 
 finally:
     badge.close()
